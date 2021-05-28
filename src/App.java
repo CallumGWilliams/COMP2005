@@ -8,7 +8,7 @@ public class App {
         URL url = new URL("http://intelligent-social-robots-ws.com/restaurant-data.json");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         int responseCode = conn.getResponseCode();
-    return null;
+    return responseCode;
     }
 
 }
