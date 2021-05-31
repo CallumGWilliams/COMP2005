@@ -5,6 +5,7 @@ import java.io.IOException;
 
 public class TestClass {
 
+    //unit test - testing http connection
     @Test
     public void testCon() throws IOException, java.text.ParseException, ParseException {
         App app = new App();
