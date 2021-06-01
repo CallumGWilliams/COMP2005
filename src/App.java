@@ -30,8 +30,9 @@ public class App {
 
     }
 
-    public void getByCuisineAndNeighbourhood(JSONArray ja, String cuisine, String chosenNeighbourhood) {
-
+    public int getByCuisineAndNeighbourhood(JSONArray ja, String cuisine, String chosenNeighbourhood) {
+        int c = 0;
+        System.out.println("Generating restaurants with cuisine: " + cuisine + " in the neighbourhood: " + chosenNeighbourhood);
 
         for (int i = 0; i < ja.size(); i++) {
             ;
@@ -44,14 +45,19 @@ public class App {
 
 
             if (cuisine_type.equals(cuisine) & neighbourhood.equals(chosenNeighbourhood)) {
-                System.out.println("Generating restaurants with cuisine: " + cuisine + " in the neighbourhood: " + chosenNeighbourhood);
+
                 System.out.println(restaurantName);
+                c++;
             }
 
         }
+        if (c == 0){
+        System.out.println("Neighbourhood: " + chosenNeighbourhood + " With cuisine type: " + cuisine + " does not exist");}
+        return c;
     }
 
-    public void getByOpeningHours(JSONArray ja, String day) {
+    public int getByOpeningHours(JSONArray ja, String day) {
+        int c = 0;
         System.out.println("Generating restaurants open on: " + day);
         for (int i = 0; i < ja.size(); i++) {
             ;
@@ -66,13 +72,16 @@ public class App {
             if (!operatingHours.get(day).equals("Closed")) {
 
                 System.out.println(restaurantName + ": " + operatingHours.get(day));
+                c++;
             }
 
 
         }
+        return c;
     }
 
-    public void getByReviewRating(JSONArray ja, String chosenNeighbourhood, int reviewRating) {
+    public int getByReviewRating(JSONArray ja, String chosenNeighbourhood, int reviewRating) {
+       int c = 0;
         for (int i = 0; i < ja.size(); i++) {
             ;
             JSONObject restaurant = (JSONObject) ja.get(i);
@@ -91,14 +100,16 @@ public class App {
 
                     if (rating >= reviewRating) {
                         System.out.println(restaurantName + ": Rating: " + rating + " review by: " + revName);
+                   c++;
                     }
                 }
             }
         }
-
+return c;
     }
 
-    public void getByDohmh(JSONArray ja, String chosenNeighbourhood) {
+    public int getByDohmh(JSONArray ja, String chosenNeighbourhood) {
+        int c = 0; //gets number of entries returned
         for (int i = 0; i < ja.size(); i++) {
             ;
             JSONObject restaurant = (JSONObject) ja.get(i);
@@ -110,14 +121,28 @@ public class App {
             if (neighbourhood.equals(chosenNeighbourhood)) {
 
                 System.out.println(dohmh + " " + restaurantName);
+                c++;
             }
 
         }
+        return c;
     }
 
-    public void getNearHotel(JSONArray ja, String neighbourhood){
-        
+    public void getNearHotel(JSONArray ja, String chosenNeighbourhood) {
+        for (int i = 0; i < ja.size(); i++) {
+            ;
+            JSONObject restaurant = (JSONObject) ja.get(i);
+            String restaurantName = (String) restaurant.get("name");
+            String neighbourhood = (String) restaurant.get("neighbourhood");
 
+
+            JSONObject latlng = (JSONObject) restaurant.get("latlng");
+            double lng = Double.parseDouble(String.valueOf(latlng.get("lng")));
+            double lat = Double.parseDouble(String.valueOf(latlng.get("lat")));
+
+
+
+        }
     }
 }
 
