@@ -1,3 +1,4 @@
+import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
@@ -9,8 +10,11 @@ public class TestClass {
     @Test
     public void testCon() throws IOException, java.text.ParseException, ParseException {
         App app = new App();
-        Object o = app.getData();
-        System.out.println(o);
+        //Restaurant r = (Restaurant) app.getData();
+        ///System.out.println(r.opening_hours);
+        JSONArray o = (JSONArray) app.getData();
+        //System.out.println(o);
+        app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
 
     }
 }
