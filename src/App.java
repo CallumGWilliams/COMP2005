@@ -50,8 +50,38 @@ public class App {
             }
     }
 
-    public void getByOpeningHours(){
+    public void getByOpeningHours(JSONArray ja, String day){
+        System.out.println("Generating restaurants open on: " + day);
+            for(int i = 0; i < ja.size(); i++){ ;
+                JSONObject restaurant = (JSONObject) ja.get(i);
+
+
+                String restaurantName = (String) restaurant.get("name");
+
+                JSONObject operatingHours = (JSONObject) restaurant.get("operating_hours");
+
+
+                if (!operatingHours.get(day).equals("Closed")){
+
+                    System.out.println(restaurantName + ": " + operatingHours.get(day));
+                }
+
+
+
+            }
+    }
+
+    public void getByReviewRating(JSONArray ja, String chosenNeighbourhood){
+        for(int i = 0; i < ja.size(); i++){ ;
+            JSONObject restaurant = (JSONObject) ja.get(i);
+        String neighbourhood = (String) restaurant.get("neighborhood");
+        String restaurantName = (String) restaurant.get("name");
         
+
+        if(neighbourhood.equals(chosenNeighbourhood)){
+
+        }
+
     }
 
 }

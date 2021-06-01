@@ -14,7 +14,7 @@ public class TestClass {
         ///System.out.println(r.opening_hours);
         JSONArray o = (JSONArray) app.getData();
         //System.out.println(o);
-        app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
-
+        //app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
+app.getByOpeningHours(o, "Saturday");
     }
 }
