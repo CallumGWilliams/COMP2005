@@ -2,6 +2,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 import java.io.IOException;
@@ -20,31 +21,31 @@ public class TestClass {
     public void testCuisine() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-        int numEntries = app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
-        assertEquals(2, numEntries);
+        JSONArray numEntries = app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
+        assertEquals(2, numEntries.size());
     }
     @Test
     public void testReview() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-       int numEntries =  app.getByReviewRating(o, "Queens", 2);
-        assertEquals(6, numEntries);
+       JSONArray numEntries =  app.getByReviewRating(o, "Queens", 2);
+        assertEquals(6, numEntries.size());
     }
 
     @Test
     public void testOpeningDay() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-        int numEntries = app.getByOpeningHours(o, "Tuesday");
-        assertEquals(9, numEntries);
+        JSONArray numEntries = app.getByOpeningHours(o, "Tuesday");
+        //assertEquals(9, numEntries);
     }
 
     @Test
     public void testDohmh() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-        int numEntries = (app.getByDohmh(o, "Brooklyn"));
-        assertEquals(3, numEntries);
+        JSONArray numEntries = (app.getByDohmh(o, "Brooklyn"));
+        assertEquals(3, numEntries.size());
     }
     @Test
     public void testReviewBVA() throws java.text.ParseException, ParseException, IOException {
@@ -57,11 +58,15 @@ public class TestClass {
     public void testWrongArea() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-        app.getByCuisineAndNeighbourhood(o, "Asian", "Brooklyn");
+        JSONArray j = app.getByCuisineAndNeighbourhood(o, "Asian", "Brooklyn");
+        assertEquals(0,j.size());
     }
 
     @Test
-    public void testNearestHotel(){
+    public void testNearestHotel() throws java.text.ParseException, ParseException, IOException {
+        App app = new App();
+        JSONArray o = (JSONArray) app.getData();
+        app.getNearHotel(o,"Brooklyn");
 
     }
 
@@ -70,12 +75,41 @@ public class TestClass {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
 
-        int pizzaEntries = app.getByCuisineAndNeighbourhood(o, "Pizza", "Brooklyn");
-        assertEquals(2, pizzaEntries);
+        JSONArray american = (JSONArray) app.getByCuisineAndNeighbourhood(o,"American","Manhattan");
 
-        int mondayEntries = app.getByOpeningHours(o, "Monday");
+        JSONArray americanTues = (JSONArray) app.getByOpeningHours(american,"Tuesday"); //will return two JSON Objects
 
-        assertEquals(9, mondayEntries);
+        assertEquals(2,americanTues.size());
 
 
-}}
+}
+
+    @Test
+    public void integrationTestRatingCuisine() throws java.text.ParseException, ParseException, IOException {
+        App app = new App();
+        JSONArray o = (JSONArray) app.getData();
+
+        JSONArray pizza = app.getByCuisineAndNeighbourhood(o,"Pizza","Brooklyn");
+
+        JSONArray goodPizza = app.getByReviewRating(pizza,"Brooklyn",4);
+
+        assertEquals(6, goodPizza.size()); //number of reviews 4+
+    }
+
+//edge test for min and max for rating scores
+    @Test
+    public void testEdgeRating() throws java.text.ParseException, ParseException, IOException {
+        App app = new App();
+        JSONArray o = (JSONArray) app.getData();
+
+        JSONArray numEntriesZero =  app.getByReviewRating(o, "Brooklyn", 0);
+
+        JSONArray numEntriesFive = app.getByReviewRating(o, "Brooklyn", 5);
+
+        assertNotEquals(numEntriesFive.size(), numEntriesZero.size());
+
+
+
+    }
+
+}
