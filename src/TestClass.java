@@ -15,6 +15,8 @@ public class TestClass {
         JSONArray o = (JSONArray) app.getData();
         //System.out.println(o);
         //app.getByCuisineAndNeighbourhood(o, "Asian","Manhattan");
-app.getByOpeningHours(o, "Saturday");
+//app.getByOpeningHours(o, "Saturday");
+        //app.getByReviewRating(o, "Manhattan", 5);
+        app.getByDohmh(o, "Manhattan");
     }
 }
