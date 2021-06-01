@@ -66,7 +66,7 @@ public class TestClass {
     public void testNearestHotel() throws java.text.ParseException, ParseException, IOException {
         App app = new App();
         JSONArray o = (JSONArray) app.getData();
-        app.getNearHotel(o,"Brooklyn");
+        app.getNearHotel(o,"Manhattan");
 
     }
 
