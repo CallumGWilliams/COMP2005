@@ -20,12 +20,16 @@ public class App {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         int responseCode = conn.getResponseCode();
 
-        Object obj = new JSONParser().parse(new InputStreamReader(conn.getInputStream()));
-        JSONObject jo = (JSONObject) obj;
-        JSONArray ja = (JSONArray) jo.get("restaurants");
+        if (responseCode == HttpURLConnection.HTTP_OK) {
 
+            Object obj = new JSONParser().parse(new InputStreamReader(conn.getInputStream()));
+            JSONObject jo = (JSONObject) obj;
+            JSONArray ja = (JSONArray) jo.get("restaurants");
+            return ja;
+        }
 
-        return ja;
+        return null;
+
 
     }
 
@@ -61,7 +65,7 @@ public class App {
         JSONArray a = new JSONArray();
         System.out.println("Generating restaurants open on: " + day);
         for (int i = 0; i < ja.size(); i++) {
-            ;
+
             JSONObject restaurant = (JSONObject) ja.get(i);
 
 
