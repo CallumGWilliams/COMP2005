@@ -8,9 +8,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.json.JSONException;
 import org.json.simple.parser.JSONParser;
 
@@ -21,12 +20,16 @@ public class App {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         int responseCode = conn.getResponseCode();
 
-        Object obj = new JSONParser().parse(new InputStreamReader(conn.getInputStream()));
-        JSONObject jo = (JSONObject) obj;
-        JSONArray ja = (JSONArray) jo.get("restaurants");
+        if (responseCode == HttpURLConnection.HTTP_OK) {
 
+            Object obj = new JSONParser().parse(new InputStreamReader(conn.getInputStream()));
+            JSONObject jo = (JSONObject) obj;
+            JSONArray ja = (JSONArray) jo.get("restaurants");
+            return ja;
+        }
 
-        return ja;
+        return null;
+
 
     }
 
@@ -51,8 +54,9 @@ public class App {
             }
 
         }
-        if (c == 0){
-        System.out.println("Neighbourhood: " + chosenNeighbourhood + " With cuisine type: " + cuisine + " does not exist");}
+        if (c == 0) {
+            System.out.println("Neighbourhood: " + chosenNeighbourhood + " With cuisine type: " + cuisine + " does not exist");
+        }
         return a;
     }
 
@@ -61,7 +65,7 @@ public class App {
         JSONArray a = new JSONArray();
         System.out.println("Generating restaurants open on: " + day);
         for (int i = 0; i < ja.size(); i++) {
-            ;
+
             JSONObject restaurant = (JSONObject) ja.get(i);
 
 
@@ -83,8 +87,8 @@ public class App {
     }
 
     public JSONArray getByReviewRating(JSONArray ja, String chosenNeighbourhood, int reviewRating) {
-       int c = 0;
-       JSONArray a = new JSONArray();
+        int c = 0;
+        JSONArray a = new JSONArray();
         for (int i = 0; i < ja.size(); i++) {
             ;
             JSONObject restaurant = (JSONObject) ja.get(i);
@@ -103,13 +107,13 @@ public class App {
 
                     if (rating >= reviewRating) {
                         System.out.println(restaurantName + ": Rating: " + rating + " review by: " + revName);
-                   c++;
-                   a.add(restaurant);
+                        c++;
+                        a.add(restaurant);
                     }
                 }
             }
         }
-return a;
+        return a;
     }
 
     public JSONArray getByDohmh(JSONArray ja, String chosenNeighbourhood) {
@@ -128,6 +132,7 @@ return a;
                 System.out.println(dohmh + " " + restaurantName);
                 c++;
                 a.add(restaurant);
+
             }
 
         }
@@ -135,14 +140,13 @@ return a;
     }
 
     public void getNearHotel(JSONArray ja, String chosenNeighbourhood) {
-JSONObject neighbourhoodLatLng = new JSONObject();
-double neighLat = 0;
-double neighLng = 0;
+        double neighLat = 0;
+        double neighLng = 0;
 
         if (chosenNeighbourhood.equals("Brooklyn")) {
 
             neighLat = 40.689510;
-            neighLng =  -73.988100;
+            neighLng = -73.988100;
 
         }
 
@@ -168,37 +172,22 @@ double neighLng = 0;
             double lng = Double.parseDouble(String.valueOf(latlng.get("lng")));
             double lat = Double.parseDouble(String.valueOf(latlng.get("lat")));
 
-
-        double distance = distance(lng, lat,neighLat, neighLng);
-        System.out.println(distance);
+            double distance = distance(lng, lat, neighLat, neighLng);
+            System.out.println(restaurantName + ": " + distance + "Km");
 
         }
     }
 
-    private double distance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
+    private double distance(double lat1, double lng1, double lat2, double lng2) {
+        double r = 6372.8;
 
-        return (dist);
+        double lat = Math.toRadians(lat2 - lat1);
+        double lng = Math.toRadians(lng2 - lng1);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        double a = Math.pow(Math.sin(lat / 2), 2) + Math.pow(Math.sin(lng / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return r * c;
     }
-
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::  This function converts decimal degrees to radians             :*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::  This function converts radians to decimal degrees             :*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
-
 }
-
-
